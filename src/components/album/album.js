@@ -1,16 +1,19 @@
 import React from 'react';
 
-const Album = React.createClass({
+class Album extends React.Component{
+  constructor(props) {
+    super(props);
+  }
 
-  handleAddAllTracks: function(tracks){
+  handleAddAllTracks = (tracks) => {
     var self = this;
 
     tracks.forEach(function(track){
       self.props.addTrack(track);
     });
-  },
+  }
 
-  render: function(){
+  render() {
     return(
       <div className={this.props.className}>
         <div className='track'>
@@ -28,6 +31,6 @@ const Album = React.createClass({
       </div>
     );
   }
-});
+};
 
 export default Album;

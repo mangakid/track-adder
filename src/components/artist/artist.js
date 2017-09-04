@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Artist = ({className,artist,getTop,getAlbums}) => {
+const Artist = ({ className, artist, getTop, getAlbums }) => {
 
   return(
     <div className={className}>

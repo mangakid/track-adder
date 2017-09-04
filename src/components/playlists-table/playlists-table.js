@@ -1,10 +1,9 @@
 import React from 'react';
-import PlaylistRow from './playlist-row';
+import PlaylistRow from '../playlist-row/playlist-row';
 
-const PlaylistsTable = React.createClass({
-  render: function(){
+class PlaylistsTable extends React.Component{
+  render() {
     var rows = [];
-
     var self = this;
 
     if(this.props.playlists.length > 0 && this.props.playlistTracks.length > 0 && !this.props.playlistName && !this.props.selectedPlaylist && this.props.active == 'playlist'){
@@ -19,10 +18,10 @@ const PlaylistsTable = React.createClass({
           <div className='rows'>{rows}</div>
         </div>
       );
-    } else {
-    return null;
     }
+
+    return null;
   }
-});
+};
 
 export default PlaylistsTable;

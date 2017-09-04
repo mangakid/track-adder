@@ -1,26 +1,24 @@
 import React from 'react';
 
-const SearchBar = React.createClass({
+class SearchBar extends React.Component{
 
-  handleChange: function(){
+  handleChange = () => {
     this.props.onUserInput(this.refs.searchTextInput.value);
-  },
+  }
 
-  handleKeyUp: function(){
-    
+  handleKeyUp = () => {
     this.props.onKeyUp(this.refs.searchTextInput.value);
-  },
+  }
 
-  clearText: function(){
+  clearText = () => {
     if(this.refs.searchTextInput.value != ''){
       this.refs.searchTextInput.value = '';
     }
-  },
+  }
 
-  render: function(){
+  render() {
     return (
       <form className='searchForm'>
-
         <input
            type="text"
            className='inputBar'
@@ -29,10 +27,10 @@ const SearchBar = React.createClass({
            ref="searchTextInput"
            onKeyUp={this.handleKeyUp}
            onChange={this.handleChange} />
-           <button type='button' className='addDelete' onClick={this.clearText}>Clear</button>
-        </form>
+        <button type='button' className='addDelete' onClick={this.clearText}>Clear</button>
+      </form>
     );
   }
-});
+};
 
 export default SearchBar;

@@ -1,10 +1,11 @@
 import React from 'react';
-import NavBar from './nav-bar';
-import TracksTable from './tracks-table';
-import ArtistsTable from './artists-table';
-import AlbumTable from './album-table';
-import PlaylistTable from './playlist-table';
-import PlaylistsTable from './playlists-table';
+
+import NavBar from '../nav-bar/nav-bar';
+import TracksTable from '../tracks-table/tracks-table';
+import ArtistsTable from '../artists-table/artists-table';
+import AlbumTable from '../album-table/album-table';
+import PlaylistTable from '../playlist-table/playlist-table';
+import PlaylistsTable from '../playlists-table/playlists-table';
 
 const ResultsTables = (props) => {
 

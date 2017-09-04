@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Logout = ({userId,handleClick}) => {
+const Logout = ({ userId, handleClick }) => {
   if(userId){
     return (
       <div className='logout'>
@@ -9,9 +9,8 @@ const Logout = ({userId,handleClick}) => {
       </div>
     )
   }
-  else {
-    return null;
-  }
+  
+  return null;
 }
 
 export default Logout;

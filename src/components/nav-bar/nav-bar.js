@@ -1,6 +1,6 @@
 import React from 'react';
 
-const NavBar = ({show,active,handleClick,playlistTracks}) => {
+const NavBar = ({ show, active, handleClick, playlistTracks }) => {
     if(show){
       return(
         <div className='navBar'>
@@ -8,11 +8,9 @@ const NavBar = ({show,active,handleClick,playlistTracks}) => {
           <div className={active == 'playlist' ? 'activeTab': 'tab'}type='button' value='playlist' onClick={handleClick.bind(null, 'playlist')}>Your Playlist ({playlistTracks.length})</div>
         </div>
       );
-    }else{
-      return(
-        null
-      );
     }
+
+    return null;
 }
 
 export default NavBar;

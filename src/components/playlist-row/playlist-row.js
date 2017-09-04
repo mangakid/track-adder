@@ -1,6 +1,6 @@
 import React from 'react';
 
-const PlaylistRow = ({className,playlist,handleClick}) => {
+const PlaylistRow = ({ className, playlist, handleClick }) => {
 
     return (
       <div className={className}>

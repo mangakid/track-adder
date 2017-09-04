@@ -1,10 +1,9 @@
 import React from 'react';
-import TrackRow from './track-row';
+import TrackRow from '../track-row/track-row';
 
-const PlaylistTable = React.createClass({
-  render: function(){
+class PlaylistTable extends React.Component{
+  render() {
     var rows = [];
-
     var self = this;
 
     if(this.props.tracks.length > 0 && this.props.active == 'playlist' && !this.props.playlists.length > 0){
@@ -18,10 +17,10 @@ const PlaylistTable = React.createClass({
           <div className='rows'>{rows}</div>
         </div>
       );
-    } else {
-      return null;
     }
+
+    return null;
   }
-});
+};
 
 export default PlaylistTable;

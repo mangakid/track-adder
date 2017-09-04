@@ -1,11 +1,10 @@
 import React from 'react';
-import TrackRow from './track-row';
+import TrackRow from '../track-row/track-row';
 
-const TracksTable = React.createClass({
+class TracksTable extends React.Component{
 
-  render: function(){
+  render() {
     var rows = [];
-
     var self = this;
 
     if(this.props.tracks.length > 0 && this.props.option === 'tracks' && this.props.active == 'results'){
@@ -20,10 +19,10 @@ const TracksTable = React.createClass({
           <div className='rows'>{rows}</div>
         </div>
       );
-    } else {
-      return null;
     }
+
+    return null;
   }
-});
+};
 
 export default TracksTable;

@@ -1,9 +1,9 @@
 import React from 'react';
-import Album from './Album';
+import Album from '../album/album';
 
-const AlbumTable = React.createClass({
+class AlbumTable extends React.Component{
 
-  render: function(){
+  render(){
     var rows = [];
     var self = this;
 
@@ -20,10 +20,10 @@ const AlbumTable = React.createClass({
           <div className='rows'>{rows}</div>
         </div>
       );
-    } else {
-      return (<div></div>);
     }
+
+    return (<div></div>);
   }
-});
+};
 
 export default AlbumTable;

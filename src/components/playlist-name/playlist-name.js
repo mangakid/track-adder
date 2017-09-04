@@ -1,12 +1,12 @@
 import React from 'react';
 
-const PlaylistName = React.createClass({
+class PlaylistName extends React.Component{
 
-  handleChange: function(){
+  handleChange = () => {
     this.props.onUserInput(this.refs.playlistTextInput.value);
-  },
+  }
 
-  render: function(){
+  render() {
     if(this.props.show != false){
       return(
         <form className='playlistName'>
@@ -20,10 +20,10 @@ const PlaylistName = React.createClass({
              <button className='addDelete' type='button' onClick={this.props.handleClick}>Add to existing?</button>
         </form>
       );
-    } else {
-      return null;
     }
+
+    return null;
   }
-});
+};
 
 export default PlaylistName;

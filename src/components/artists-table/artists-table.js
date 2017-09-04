@@ -1,9 +1,9 @@
 import React from 'react';
-import Artist from './artist';
+import Artist from '../artist/artist';
 
-const ArtistsTable = React.createClass({
+class ArtistsTable extends React.Component{
 
-  render: function(){
+  render() {
     var rows = [];
     var self = this;
 
@@ -24,6 +24,6 @@ const ArtistsTable = React.createClass({
       return null;
     }
   }
-});
+};
 
 export default ArtistsTable;

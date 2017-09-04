@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TrackRow = ({className,track,handleClick,value}) => {
+const TrackRow = ({ className, track, handleClick, value}) => {
 
   return (
     <div className={className}>

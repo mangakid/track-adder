@@ -2,11 +2,42 @@ const webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-  entry: './src/app.js',
+  entry: {
+    'app' : [
+      'react-hot-loader/patch',
+      './src/app.js'
+    ]
+  },
   output: {
     path: __dirname,
-    filename: 'app.js'
+    filename: 'bundle.js'
   },
+  module: {
+    rules: [
+      {
+        test: /.js?$/,
+        use: [
+          { loader: 'react-hot-loader/webpack' },
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ['env','react', 'es2015', 'react-hmre'],
+              plugins: ['transform-class-properties']
+            }
+          }
+        ],
+        exclude: /node_modules/
+      },
+      {
+        test: /\.scss$/,
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: ["css-loader","sass-loader"]
+        })
+      }
+    ]
+  },
+
   devServer: {
     historyApiFallback: true,
     hot: true,
@@ -17,24 +48,8 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new ExtractTextPlugin('public/style.css', {
+    new ExtractTextPlugin('./css/base.css', {
             allChunks: true
         })
-  ],
-  module: {
-    loaders: [
-      {
-        test: /.jsx?$/,
-        loaders: [
-          'react-hot-loader/webpack',
-          'babel?presets[]=es2015,presets[]=react,presets[]=react-hmre'
-        ],
-        exclude: /node_modules/
-      },
-      {
-        test: /\.scss$/,
-        loader: ExtractTextPlugin.extract('css!sass')
-      }
-    ]
-  },
+  ]
 };

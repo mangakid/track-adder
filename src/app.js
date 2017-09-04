@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MakePlaylistButton from './components/make-playlist-button';
-import PlaylistName from './components/playlist-name';
-import SearchBar from './components/search-bar';
-import Logout from './components/logout';
-import RadioOptions from './components/radio-options';
-import ResultsTables from './components/results-tables';
-import Login from './components/login';
 import debounce from 'es6-promise-debounce';
+
+import MakePlaylistButton from './components/make-playlist-button/make-playlist-button';
+import PlaylistName from './components/playlist-name/playlist-name';
+import SearchBar from './components/search-bar/search-bar';
+import Logout from './components/logout/logout';
+import RadioOptions from './components/radio-options/radio-options';
+import ResultsTables from './components/results-tables/results-tables';
+import Login from './components/login/login';
+import SpotifyWebApi from '../scripts/spotify-web-api';
 
 var spotifyApi = new SpotifyWebApi();
 
@@ -17,30 +19,30 @@ spotifyApi.searchAlbums   = debounce(spotifyApi.searchAlbums, 500);
 
       //  Main App
 
-      var App = React.createClass({
+      class App extends React.Component {
+        constructor(props) {
+         super(props);
+         this.state = {
+             searchText: '',
+             playlistName: '',
+             tracks: [],
+             albums: [],
+             fullAlbums: [],
+             artists: [],
+             playlistTracks: [],
+             selectedPlaylist: '',
+             playlists: [],
+             action: '',
+             userId: '',
+             token : '',
+             expires: '',
+             stateKey: '',
+             radio: 'tracks',
+             nav: 'results'
+         };
+       }
 
-        getInitialState: function(){
-          return{
-            searchText: '',
-            playlistName: '',
-            tracks: [],
-            albums: [],
-            fullAlbums: [],
-            artists: [],
-            playlistTracks: [],
-            selectedPlaylist: '',
-            playlists: [],
-            action: '',
-            userId: '',
-            token : '',
-            expires: '',
-            stateKey: '',
-            radio: 'tracks',
-            nav: 'results'
-          };
-        },
-
-        logOut: function(){
+        logOut = () => {
           this.setState({
           selectedPlaylist: '',
           playlists: [],
@@ -50,9 +52,9 @@ spotifyApi.searchAlbums   = debounce(spotifyApi.searchAlbums, 500);
           expires: '',
           stateKey: '',
           });
-        },
+        }
 
-        handleRadioChange: function(e){
+        handleRadioChange = (e) => {
           this.setState({
             radio: e.currentTarget.value
           },function(){
@@ -60,17 +62,17 @@ spotifyApi.searchAlbums   = debounce(spotifyApi.searchAlbums, 500);
               this.handleUserSearchInput(this.state.searchText);
             }
           });
-        },
+        }
 
-        handleUserSearchChange: function(searchText){
+        handleUserSearchChange = (searchText) => {
           var self = this;
 
           self.setState({
             searchText: searchText
           });
-        },
+        }
 
-        handleUserSearchInput: function(searchText){
+        handleUserSearchInput = (searchText) => {
 
           var self = this;
 
@@ -125,9 +127,9 @@ spotifyApi.searchAlbums   = debounce(spotifyApi.searchAlbums, 500);
           } else{
             self.setState({tracks: '', artists: '', albums: ''});
           }
-        },
+        }
 
-        getArtistsAlbums: function(artist){
+        getArtistsAlbums = (artist) => {
         var self = this;
          spotifyApi.getArtistAlbums(artist.id)
               .then(
@@ -157,9 +159,9 @@ spotifyApi.searchAlbums   = debounce(spotifyApi.searchAlbums, 500);
               }, function(err){
                 console.error(err);
               });
-        },
+        }
 
-        getTopTracks: function(artist){
+        getTopTracks = (artist) => {
           var self = this;
           spotifyApi.getArtistTopTracks(artist.id, 'ES')
             .then(function(data){
@@ -172,9 +174,9 @@ spotifyApi.searchAlbums   = debounce(spotifyApi.searchAlbums, 500);
             function(err){
               console.error(err);
             });
-        },
+        }
 
-        handleUserPlaylistInput: function(playlistName){
+        handleUserPlaylistInput = (playlistName) => {
           this.setState({
             playlistName: playlistName
           });
@@ -185,9 +187,9 @@ spotifyApi.searchAlbums   = debounce(spotifyApi.searchAlbums, 500);
               playlists: []
             });
           }
-        },
+        }
 
-        authenticate: function(){
+        authenticate = () => {
 
           var self = this;
 
@@ -238,9 +240,9 @@ spotifyApi.searchAlbums   = debounce(spotifyApi.searchAlbums, 500);
 
           window.open(url);
 
-        },
+        }
 
-        createUpdateOrReceivePlaylists(){
+        createUpdateOrReceivePlaylists = () => {
 
           var self = this;
 
@@ -303,9 +305,9 @@ spotifyApi.searchAlbums   = debounce(spotifyApi.searchAlbums, 500);
                 });
             });
           }
-        },
+        }
 
-        handleMakePlaylist: function(){
+        handleMakePlaylist = () => {
 
           var action = this.state.selectedPlaylist ? 'UPDATE_PLAYLIST' : 'MAKE_PLAYLIST';
 
@@ -319,9 +321,9 @@ spotifyApi.searchAlbums   = debounce(spotifyApi.searchAlbums, 500);
                 }
             }.bind(this));
           }
-        },
+        }
 
-        addTrack: function(track){
+        addTrack = (track) => {
 
           if(this.state.playlistTracks.indexOf(track) == -1){
             var playlistTracks = this.state.playlistTracks;
@@ -334,9 +336,9 @@ spotifyApi.searchAlbums   = debounce(spotifyApi.searchAlbums, 500);
 
             console.log(track.name + ' was added to playlist');
           }
-        },
+        }
 
-        subtractTrack: function(track){
+        subtractTrack = (track) => {
 
           var playlistTracks = this.state.playlistTracks;
 
@@ -348,23 +350,23 @@ spotifyApi.searchAlbums   = debounce(spotifyApi.searchAlbums, 500);
           });
 
           console.log(track.name + ' was subtracted from playlist');
-        },
+        }
 
-        loadAlbumTracks: function(tracks){
+        loadAlbumTracks = (tracks) => {
           this.setState({
             tracks: tracks,
             radio: 'tracks'
           });
-        },
+        }
 
-        selectPlaylist: function(playlist){
+        selectPlaylist = (playlist) => {
           this.setState({
             selectedPlaylist: playlist,
             playlists: []
           });
-        },
+        }
 
-        getExistingPlaylists: function(){
+        getExistingPlaylists = () => {
           this.setState({
             action: 'GET_PLAYLISTS',
             selectedPlaylist: '',
@@ -378,17 +380,17 @@ spotifyApi.searchAlbums   = debounce(spotifyApi.searchAlbums, 500);
                   this.createUpdateOrReceivePlaylists();
                 }
             }.bind(this));
-        },
+        }
 
-        changeView: function(value){
+        changeView = (value) => {
           console.log(value);
 
           this.setState({
             nav: value
           });
-        },
+        }
 
-        render: function(){
+        render() {
           if(this.state.expires < new Date()){
             return(
               <Login
@@ -400,8 +402,13 @@ spotifyApi.searchAlbums   = debounce(spotifyApi.searchAlbums, 500);
           return (
             <div className='mainDiv'>
               <Logout userId={this.state.userId} handleClick={this.logOut}></Logout>
-              <RadioOptions option={this.state.radio} handleChange={this.handleRadioChange}/>
-              <SearchBar searchText={this.state.searchText} onUserInput={this.handleUserSearchChange} onKeyUp={this.handleUserSearchInput}/>
+              <RadioOptions
+                option={this.state.radio}
+                handleChange={this.handleRadioChange} />
+              <SearchBar
+                searchText={this.state.searchText}
+                onUserInput={this.handleUserSearchChange}
+                onKeyUp={this.handleUserSearchInput} />
               <ResultsTables
                 tracks={this.state.tracks}
                 albums={this.state.albums}
@@ -419,16 +426,21 @@ spotifyApi.searchAlbums   = debounce(spotifyApi.searchAlbums, 500);
                 addTrack={this.addTrack}
                 selectTracks={this.loadAlbumTracks}
                 subtractTrack={this.subtractTrack}
-                selectPlaylist={this.selectPlaylist}
-
-              />
-              <PlaylistName show={this.state.playlistTracks.length > 0 && this.state.nav == 'playlist'} playlistName={this.state.playlistName} handleClick={this.getExistingPlaylists} onUserInput={this.handleUserPlaylistInput} />
-              <MakePlaylistButton show={this.state.playlistTracks.length > 0 && this.state.nav == 'playlist'} handleClick={this.handleMakePlaylist} selectedPlaylist={this.state.selectedPlaylist}/>
+                selectPlaylist={this.selectPlaylist} />
+              <PlaylistName
+                show={this.state.playlistTracks.length > 0 && this.state.nav == 'playlist'}
+                playlistName={this.state.playlistName}
+                handleClick={this.getExistingPlaylists}
+                onUserInput={this.handleUserPlaylistInput} />
+              <MakePlaylistButton
+                show={this.state.playlistTracks.length > 0 && this.state.nav == 'playlist'}
+                handleClick={this.handleMakePlaylist}
+                selectedPlaylist={this.state.selectedPlaylist} />
 
             </div>
           );
         }
-      });
+      };
 
       ReactDOM.render(
         <App />,
