@@ -1,0 +1,329 @@
+@import url(https://fonts.googleapis.com/css?family=Press+Start+2P);
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500,700,900);
+@import '../src/components/radio-options/radio-options';
+
+$trackadderTheme1 : #00ff9d;
+
+html, body{
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background-color: #26282d;
+  color: $trackadderTheme1;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+}
+
+th{
+  text-align: left;
+}
+
+.flex-center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.top-bar{
+  color: #000;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: $trackadderTheme1;
+  width: 100%;
+  height: 10%;
+  min-height: 50px;
+
+  @media screen and (min-width: 768px) {
+    height: 7%;
+  }
+}
+
+.site-title{
+  font-family: 'Press Start 2P', cursive;
+  padding-left: 5vw;
+}
+
+.site-description{
+  padding-left: 5vw;
+}
+
+#content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 10px;
+  margin-right: 10px;
+  max-height: 100%;
+  height: 100%;
+}
+
+.track{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.album{
+  display: flex;
+  justify-content: space-between;
+}
+
+.titleRow{
+  background-color: #89FFBB;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+  border-bottom: 1px solid #000;
+}
+
+.tableTitle{
+  display: flex;
+  border-bottom: 1px solid #89FFBB;
+  font-size: medium;
+  padding: 5px;
+  background-color: #26282d;
+}
+
+.resultsTables{
+  display: flex;
+  max-height: 60%;
+  min-height: 200px;
+  flex-direction: column;
+
+  @media screen and (min-width: 768px) {
+    margin: 1% 5%;
+  }
+}
+
+.navBar{
+  display: flex;
+  min-height: 40px;
+  @media screen and (min-width: 768px) {
+    min-height: 50px;
+  }
+}
+
+.activeTab{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #31353e;
+  background-color: $trackadderTheme1;
+  width: 50%;
+  border: 1px solid $trackadderTheme1;
+  cursor: pointer;
+}
+
+.tab{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #31353e;
+  width: 50%;
+  border: 1px solid $trackadderTheme1;
+  border-bottom-color: $trackadderTheme1;
+  cursor: pointer;
+}
+
+.tab:hover{
+  background-color: rgba(0,255,157,0.5);
+}
+
+.rows{
+  border: solid 1px $trackadderTheme1;
+  overflow: auto;
+}
+
+.buttons{
+  display: flex;
+  width: 35%;
+}
+
+.custom-button{
+  outline: none !important;
+  border:1px solid $trackadderTheme1;
+  background-color: transparent;
+  color: $trackadderTheme1;
+}
+
+.custom-button:focus {
+    outline: none !important;
+    box-shadow: 0 0 10px $trackadderTheme1;
+}
+
+.playlistRow{
+  display: flex;
+}
+
+.addDelete{
+  background-color: $trackadderTheme1;
+  border: 1px;
+  font-size: initial;
+}
+
+.addDelete:focus {
+    outline: none !important;
+    box-shadow: 0 0 10px $trackadderTheme1;
+}
+
+.artist{
+  padding: 5px;
+  font-size: small;
+  text-align: center;
+}
+
+.trackTitle{
+  padding: 5px;
+  font-size: small;
+  text-align: center;
+}
+
+.mainDiv{
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 100%;
+  width: 100%;
+}
+
+.playlistName{
+  display: flex;
+  margin-bottom: 5px;
+  min-height: 40px;
+
+  @media screen and (min-width: 768px) {
+    margin: 1% 5%;
+  }
+}
+
+.playlistButton{
+  border: 1px solid $trackadderTheme1;
+  min-height: 30px;
+  width: 30%;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: initial;
+  background-color: $trackadderTheme1;
+}
+
+.searchForm{
+  display: flex;
+  margin-bottom: 5px;
+  min-height: 30px;
+  max-width: 500px;
+
+  @media screen and (min-width: 768px) {
+    margin: 1% 5%;
+    max-width: 500px;
+  }
+}
+
+.inputBar{
+  color: $trackadderTheme1;
+  background-color: #26282d;
+  width: 100%;
+  border: 1px solid $trackadderTheme1  }
+
+.inputBar:focus {
+    outline: none !important;
+    box-shadow: 0 0 10px $trackadderTheme1;
+}
+
+.odd{
+  min-height: 40px;
+  font-size: inherit;
+  color: $trackadderTheme1;
+  border: solid 1px $trackadderTheme1;
+  display: flex;
+  background-color: #31353e;
+  justify-content: space-between;
+}
+
+.odd:focus {
+    outline: none !important;
+    box-shadow: 0 0 10px $trackadderTheme1;
+}
+
+.even{
+  min-height: 40px;
+  font-size: inherit;
+  color: $trackadderTheme1;
+  border: solid 1px $trackadderTheme1;
+  display: flex;
+  background-color: #26282d;
+  justify-content: space-between;
+}
+
+button.even, button.odd{
+  width: 3em;
+}
+
+.even:focus {
+    outline: none !important;
+    box-shadow: 0 0 10px $trackadderTheme1;
+}
+
+.addButton{
+  width: 14%;
+}
+
+.tracksTable, .playlistTable, .albumsTable, .artistsTable, .playlistsTable{
+  border: 1px solid $trackadderTheme1;
+  border-top: 0px;
+  margin-bottom: 10px;
+  overflow: scroll;
+}
+
+a {
+  color: #4183c4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+h1, h2, h3, h4 {
+  font-weight: bold;
+  margin: 0 0 0px;
+  padding: 0;
+}
+
+h1 {
+  border-bottom: 1px solid #ddd;
+  font-size: 2.5em;
+  font-weight: bold;
+  margin: 0 0 15px;
+  padding: 0;
+}
+
+h2 {
+  border-bottom: 1px solid #eee;
+  font-size: 2em;
+}
+
+h3 {
+  font-size: 1.5em;
+}
+
+h4 {
+  font-size: 1.2em;
+}
+
+p, ul {
+  margin: 0px 0;
+}
+
+ul {
+  padding-left: 30px;
+}
+
+.logout{
+  margin: 5%;
+  margin-top: 0%;
+  margin-bottom: 0%;
+}

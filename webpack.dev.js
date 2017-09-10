@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -48,8 +48,6 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new ExtractTextPlugin('./css/base.css', {
-            allChunks: true
-        })
+    new ExtractTextPlugin('./css/base.css')
   ]
 };

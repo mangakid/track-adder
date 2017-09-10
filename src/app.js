@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import debounce from 'es6-promise-debounce';
+import style from '../css/base.scss';
 
 import MakePlaylistButton from './components/make-playlist-button/make-playlist-button';
 import PlaylistName from './components/playlist-name/playlist-name';
