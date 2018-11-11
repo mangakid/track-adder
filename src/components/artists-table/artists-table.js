@@ -1,29 +1,22 @@
 import React from 'react';
 import Artist from '../artist/artist';
 
-class ArtistsTable extends React.Component{
+const ArtistsTable = ({ active, artists, getArtistsAlbums, getTop, option}) => {
+  const renderRows = () => artists.map((artist, index) => (
+    <Artist 
+      artist={artist} 
+      key={index} 
+      className={index % 2 ? 'even' : 'odd'} 
+      getAlbums={getArtistsAlbums} 
+      getTop={getTop} />
+  ));
 
-  render() {
-    var rows = [];
-    var self = this;
-
-    if(this.props.artists.length > 0 && this.props.option === 'artists' && this.props.active == 'results'){
-
-      this.props.artists.forEach(function(artist){
-          var style = self.props.artists.indexOf(artist)%2 ? 'even' : 'odd';
-          rows.push(<Artist artist={artist} key={self.props.artists.indexOf(artist)} className={style} getAlbums={self.props.getArtistsAlbums} getTop={self.props.getTop}/>);
-        })
-
-      return(
-        <div className='artistsTable'>
-          <div className='tableTitle'>Artists Found:</div>
-          <div className='rows'>{rows}</div>
-        </div>
-      );
-    } else {
-      return null;
-    }
-  }
+  return(artists.length && option === 'artists' && active === 'results') &&
+    <div className='artistsTable'>
+      <div className='tableTitle'>Artists Found:</div>
+      <div className='rows'>{renderRows()}</div>
+    </div>
+    || null;
 };
 
 export default ArtistsTable;

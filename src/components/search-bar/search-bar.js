@@ -10,7 +10,8 @@ class SearchBar extends React.Component{
     this.props.onKeyUp(this.refs.searchTextInput.value);
   }
 
-  clearText = () => {
+  clearText = (e) => {
+    e.preventDefault();
     if(this.refs.searchTextInput.value != ''){
       this.refs.searchTextInput.value = '';
     }
@@ -18,7 +19,7 @@ class SearchBar extends React.Component{
 
   render() {
     return (
-      <form className='searchForm'>
+      <div className='searchForm'>
         <input
            type="text"
            className='inputBar'
@@ -28,7 +29,7 @@ class SearchBar extends React.Component{
            onKeyUp={this.handleKeyUp}
            onChange={this.handleChange} />
         <button type='button' className='addDelete' onClick={this.clearText}>Clear</button>
-      </form>
+      </div>
     );
   }
 };

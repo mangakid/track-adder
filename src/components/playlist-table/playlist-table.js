@@ -1,26 +1,13 @@
 import React from 'react';
 import TrackRow from '../track-row/track-row';
 
-class PlaylistTable extends React.Component{
-  render() {
-    var rows = [];
-    var self = this;
+const PlaylistTable = ({ active, handleClick, playlists, tracks, }) => {
+  const renderRows = () => tracks.map((track, index) => (<TrackRow track={track} key={index} className={index % 2 ? 'even' : 'odd'} value='-' handleClick={handleClick}/>));
 
-    if(this.props.tracks.length > 0 && this.props.active == 'playlist' && !this.props.playlists.length > 0){
-      this.props.tracks.forEach(function(track){
-        var style = self.props.tracks.indexOf(track)%2 ? 'even' : 'odd';
-        rows.push(<TrackRow track={track} key={self.props.tracks.indexOf(track)} className={style} value='-' handleClick={self.props.handleClick}/>);
-      });
-
-      return (
-        <div className='playlistTable'>
-          <div className='rows'>{rows}</div>
-        </div>
-      );
-    }
-
-    return null;
-  }
-};
+  return (tracks.length && active === 'playlist' && !playlists.length) &&
+    <div className='playlistTable'>
+      <div className='rows'>{renderRows()}</div>
+    </div> || null;
+}
 
 export default PlaylistTable;

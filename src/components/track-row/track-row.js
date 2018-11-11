@@ -12,7 +12,7 @@ const TrackRow = ({ className, track, handleClick, value}) => {
         <div className='trackTitle'>{track.name}</div>
         <div className='artist'>{track.artists[0].name}</div>
       </div>
-      <button className={className} onClick={handleClick.bind(null, track)}>{value}</button>
+      <button className={className} onClick={() => handleClick(track)}>{value}</button>
     </div>
   );
 }

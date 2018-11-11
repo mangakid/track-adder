@@ -1,29 +1,18 @@
 import React from 'react';
 import Album from '../album/album';
 
-class AlbumTable extends React.Component{
+const AlbumTable = (props) => {
+  const { active, fullAlbums, handleAddTrack, option, selectTracks} = props;
+  const renderRows = () => fullAlbums.map((album) => {
+    const style = fullAlbums.indexOf(album) % 2 ? 'even' : 'odd';
+    return <Album album={album} key={fullAlbums.indexOf(album)} className={style} addTrack={handleAddTrack} selectTracks={selectTracks}/>;
+  })
 
-  render(){
-    var rows = [];
-    var self = this;
-
-    if(this.props.fullAlbums.length > 0 && this.props.option === 'albums' && this.props.active == 'results'){
-
-      this.props.fullAlbums.forEach(function(album){
-          var style = self.props.fullAlbums.indexOf(album)%2 ? 'even' : 'odd';
-          rows.push(<Album album={album} key={self.props.fullAlbums.indexOf(album)} className={style} addTrack={self.props.handleAddTrack} selectTracks={self.props.selectTracks}/>);
-        })
-
-      return(
-        <div className='albumsTable'>
-          <div className='tableTitle'>Albums Found:</div>
-          <div className='rows'>{rows}</div>
-        </div>
-      );
-    }
-
-    return (<div></div>);
-  }
-};
+  return (fullAlbums.length && option === 'albums' && active === 'results') && 
+    <div className='albumsTable'>
+      <div className='tableTitle'>Albums Found:</div>
+      <div className='rows'>{renderRows()}</div>
+    </div> || null;
+}
 
 export default AlbumTable;

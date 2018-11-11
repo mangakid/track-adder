@@ -1,28 +1,22 @@
 import React from 'react';
 import TrackRow from '../track-row/track-row';
 
-class TracksTable extends React.Component{
+const TracksTable = ({ active, handleClick, option, tracks }) => {
+  const renderRows = () => tracks.map((track, index) => (
+    <TrackRow 
+      track={track} 
+      key={index} 
+      className={index %2 ? 'even' : 'odd'} 
+      value='+' 
+      handleClick={handleClick}/>
+  ));
 
-  render() {
-    var rows = [];
-    var self = this;
-
-    if(this.props.tracks.length > 0 && this.props.option === 'tracks' && this.props.active == 'results'){
-      this.props.tracks.forEach(function(track){
-        var style = self.props.tracks.indexOf(track)%2 ? 'even' : 'odd';
-        rows.push(<TrackRow track={track} key={self.props.tracks.indexOf(track)} className={style} value='+' handleClick={self.props.handleClick}/>);
-      });
-
-      return (
-        <div className='tracksTable'>
-          <div className='tableTitle'>Tracks Found:</div>
-          <div className='rows'>{rows}</div>
-        </div>
-      );
-    }
-
-    return null;
-  }
+  return (tracks.length && option === 'tracks' && active === 'results') && (
+    <div className='tracksTable'>
+      <div className='tableTitle'>Tracks Found:</div>
+      <div className='rows'>{renderRows()}</div>
+    </div>
+  ) || null;
 };
 
 export default TracksTable;

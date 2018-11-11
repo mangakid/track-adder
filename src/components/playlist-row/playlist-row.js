@@ -5,7 +5,7 @@ const PlaylistRow = ({ className, playlist, handleClick }) => {
     return (
       <div className={className}>
         <div>{playlist.name}</div>
-        <button className='custom-button' onClick={handleClick.bind(null, playlist)}>Select Playlist</button>
+        <button className='custom-button' onClick={() => handleClick(playlist)}>Select Playlist</button>
       </div>
     );
 }

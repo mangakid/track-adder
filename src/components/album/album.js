@@ -1,36 +1,34 @@
 import React from 'react';
 
-class Album extends React.Component{
-  constructor(props) {
-    super(props);
-  }
+const Album = (props) => {
+  const { addTrack, album: { artists, name, tracks: { items: tracks } }, className, selectTracks} = props;
 
-  handleAddAllTracks = (tracks) => {
-    var self = this;
-
-    tracks.forEach(function(track){
-      self.props.addTrack(track);
+  const handleAddAllTracks = () => {
+    tracks.forEach((track) => {
+      addTrack(track);
     });
   }
 
-  render() {
-    return(
-      <div className={this.props.className}>
-        <div className='track'>
-          <div className='titles'>Album:</div>
-          <div className='titles'>Artist:</div>
-        </div>
-        <div className='track'>
-          <div className='trackTitle'>{this.props.album.name}</div>
-          <div className='artist'>{this.props.album.artists[0].name}</div>
-        </div>
-        <div className='buttons'>
-          <button className='custom-button' onClick={this.handleAddAllTracks.bind(null, this.props.album.tracks.items)}>Add All Tracks</button>
-          <button className='custom-button' onClick={this.props.selectTracks.bind(null, this.props.album.tracks.items)}>Choose Tracks</button>
-        </div>
-      </div>
-    );
+  const handleSelectTracks = () => {
+    selectTracks(tracks)
   }
+
+  return(
+    <div className={className}>
+      <div className='track'>
+        <div className='titles'>Album:</div>
+        <div className='titles'>Artist:</div>
+      </div>
+      <div className='track'>
+        <div className='trackTitle'>{name}</div>
+        <div className='artist'>{artists[0].name}</div>
+      </div>
+      <div className='buttons'>
+        <button className='custom-button' onClick={handleAddAllTracks}>Add All Tracks</button>
+        <button className='custom-button' onClick={handleSelectTracks}>Choose Tracks</button>
+      </div>
+    </div>
+  );
 };
 
 export default Album;

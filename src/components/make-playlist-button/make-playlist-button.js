@@ -1,11 +1,6 @@
 import React from 'react';
 
-const MakePlaylistButton = ({ show, handleClick, selectedPlaylist }) => {
-  if(show){
-    return <button className='playlistButton' onClick={handleClick}>{selectedPlaylist ? 'Add to: ' + selectedPlaylist.name : 'Make Playlist'}</button>
-  }
+const MakePlaylistButton = ({ show, handleClick, selectedPlaylist }) => show && <button className='playlistButton' onClick={handleClick}>{selectedPlaylist ? 'Add to: ' + selectedPlaylist.name : 'Make Playlist'}</button> || null;
 
-  return null;
-}
 
 export default MakePlaylistButton;

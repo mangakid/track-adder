@@ -1,27 +1,15 @@
 import React from 'react';
 import PlaylistRow from '../playlist-row/playlist-row';
 
-class PlaylistsTable extends React.Component{
-  render() {
-    var rows = [];
-    var self = this;
+const PlaylistsTable = ({active, handleClick, playlistName, playlistTracks, playlists, selectedPlaylist}) => {
+  const renderRows = () => playlists.map((playlist, index) => (<PlaylistRow playlist={playlist} key={index} className={index % 2 ? 'even' : 'odd'} handleClick={handleClick}/>));
 
-    if(this.props.playlists.length > 0 && this.props.playlistTracks.length > 0 && !this.props.playlistName && !this.props.selectedPlaylist && this.props.active == 'playlist'){
-      this.props.playlists.forEach(function(playlist){
-        var style = self.props.playlists.indexOf(playlist)%2 ? 'even' : 'odd';
-        rows.push(<PlaylistRow playlist={playlist} key={self.props.playlists.indexOf(playlist)} className={style} handleClick={self.props.handleClick}/>);
-      })
-
-      return (
-        <div className='playlistsTable'>
-          <div className='tableTitle'>Select a playlist</div>
-          <div className='rows'>{rows}</div>
-        </div>
-      );
-    }
-
-    return null;
-  }
+  return (playlists.length && playlistTracks.length && !playlistName && !selectedPlaylist && active === 'playlist') && (
+    <div className='playlistsTable'>
+      <div className='tableTitle'>Select a playlist</div>
+      <div className='rows'>{renderRows()}</div>
+    </div>
+  ) || null;
 };
 
 export default PlaylistsTable;
