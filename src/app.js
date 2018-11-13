@@ -65,22 +65,18 @@ class App extends React.Component {
     );
   };
 
-  handleUserSearchChange = searchText => {
-    this.setState({
-      searchText: searchText
-    });
-  };
+  handleUserSearchChange = searchText => this.setState({ searchText });
 
   handleUserSearchInput = searchText => {
     if (searchText) {
       if (this.state.radio === "tracks") {
-        spotifyApi.searchTracks("track:" + searchText).then(
-          data => {
+        spotifyApi.searchTracks(`track:${searchText}`).then(
+          ({ tracks: { items: tracks } }) => {
             // console.log(
             //  'Search tracks by "' + searchText + '" in the track name',
             //  data
             // );
-            this.setState({ tracks: data.tracks.items });
+            this.setState({ tracks });
           },
           err => {
             console.error(err);
@@ -88,7 +84,7 @@ class App extends React.Component {
         );
       } else if (this.state.radio === "artists") {
         spotifyApi
-          .searchArtists("artist:" + searchText, {
+          .searchArtists(`artist:${searchText}`, {
             Authorization: "Bearer " + "6e3b7695b6a54ff6ac27fdcc35afd87d"
           })
           .then(
@@ -102,18 +98,15 @@ class App extends React.Component {
           );
       } else {
         spotifyApi.searchAlbums("album:" + searchText).then(
-          data => {
+          ({ albums }) => {
             // console.log("search album data received : " + data);
-            this.setState({ albums: data.albums.items }, () => {
-              var albumIds = [];
-              this.state.albums.forEach(function(album) {
-                albumIds.push(album.id);
-              });
+            this.setState({ albums: albums.items }, () => {
+              const albumIds = this.state.albums.map(({ id }) => id);
               if (albumIds.length) {
                 spotifyApi.getAlbums(albumIds).then(
-                  data => {
+                  ({ albums: fullAlbums }) => {
                     // console.log("Albums received: " + data.albums);
-                    this.setState({ fullAlbums: data.albums });
+                    this.setState({ fullAlbums });
                   },
                   err => {
                     console.error(err);
@@ -134,17 +127,14 @@ class App extends React.Component {
 
   getArtistsAlbums = artist => {
     spotifyApi.getArtistAlbums(artist.id).then(
-      data => {
+      ({ items }) => {
         // console.log("search album data received : " + data);
-        this.setState({ albums: data.items, radio: "albums" }, () => {
-          var albumIds = [];
-          this.state.albums.forEach(album => {
-            albumIds.push(album.id);
-          });
+        this.setState({ albums: items, radio: "albums" }, () => {
+          const albumIds = this.state.albums.map(({ id }) => id);
           spotifyApi.getAlbums(albumIds).then(
-            data => {
+            ({ albums: fullAlbums }) => {
               // console.log("Albums received: " + data.albums);
-              this.setState({ fullAlbums: data.albums });
+              this.setState({ fullAlbums });
             },
             err => {
               console.error(err);
@@ -160,10 +150,10 @@ class App extends React.Component {
 
   getTopTracks = artist => {
     spotifyApi.getArtistTopTracks(artist.id, "ES").then(
-      data => {
+      ({ tracks }) => {
         // console.log("top tracks received");
         this.setState({
-          tracks: data.tracks,
+          tracks,
           radio: "tracks"
         });
       },
@@ -174,9 +164,7 @@ class App extends React.Component {
   };
 
   handleUserPlaylistInput = playlistName => {
-    this.setState({
-      playlistName: playlistName
-    });
+    this.setState({ playlistName });
 
     if (playlistName) {
       this.setState({
@@ -218,11 +206,12 @@ class App extends React.Component {
         ) {
           // console.log("states match, token received");
           spotifyApi.setAccessToken(hash.access_token);
-          var expirationTime = new Date();
+          let expirationTime = new Date();
           expirationTime = expirationTime.setSeconds(
             expirationTime.getSeconds() + hash.expires_in
           );
           // console.log("will expire on :" + expirationTime);
+          // setToken & setExpires
           this.setState({
             token: hash.access_token,
             expires: expirationTime
@@ -248,18 +237,11 @@ class App extends React.Component {
   };
 
   createUpdateOrReceivePlaylists = () => {
-    var uris = [];
-    this.state.playlistTracks.forEach(function(track) {
-      uris.push(track.uri);
-    });
+    const uris = this.state.playlistTracks.map(({ uri }) => uri);
 
     if (this.state.action == "MAKE_PLAYLIST") {
-      var pName = "";
-      pName =
-        this.state.playlistName === ""
-          ? "A rad playlist"
-          : this.state.playlistName;
-      var playlistOptions = { name: pName };
+      const name = this.state.playlistName || "A rad playlist";
+      const playlistOptions = { name };
       spotifyApi.createPlaylist(this.state.userId, playlistOptions).then(
         data => {
           /*  console.log(
@@ -298,7 +280,7 @@ class App extends React.Component {
           uris
         )
         .then(
-          data => {
+          () => {
             // console.log("Tracks added " + JSON.stringify(data));
             this.setState({
               action: ""
@@ -313,10 +295,10 @@ class App extends React.Component {
         );
     } else if (this.state.action == "GET_PLAYLISTS") {
       spotifyApi.getUserPlaylists(this.state.userId).then(
-        data => {
+        ({ items }) => {
           //console.log('Playlists found: ' + JSON.stringify(data.items));
           this.setState({
-            playlists: data.items,
+            playlists: items,
             showPlaylists: true,
             action: ""
           });
@@ -337,7 +319,7 @@ class App extends React.Component {
       : "MAKE_PLAYLIST";
 
     if (this.state.playlistTracks.length) {
-      this.setState({ action: action }, () => {
+      this.setState({ action }, () => {
         if (this.state.expires < new Date()) {
           this.authenticate();
         } else {
@@ -348,42 +330,36 @@ class App extends React.Component {
   };
 
   addTrack = track => {
-    if (this.state.playlistTracks.indexOf(track) == -1) {
-      var playlistTracks = this.state.playlistTracks;
-      playlistTracks.push(track);
-
-      this.setState({
-        playlistTracks: playlistTracks,
+    if (this.state.playlistTracks.indexOf(track) === -1) {
+      this.setState(({ playlistTracks }) => ({
+        playlistTracks: [...playlistTracks, track],
         searchText: ""
-      });
+      }));
 
       // console.log(track.name + " was added to playlist");
     }
   };
 
   subtractTrack = track => {
-    var playlistTracks = this.state.playlistTracks;
-
-    var index = playlistTracks.indexOf(track);
-    playlistTracks.splice(index, 1);
-
-    this.setState({
-      playlistTracks: playlistTracks
-    });
+    this.setState(({ playlistTracks }) => ({
+      playlistTracks: playlistTracks.filter(
+        currentTrack => currentTrack !== track
+      )
+    }));
 
     // console.log(track.name + " was subtracted from playlist");
   };
 
   loadAlbumTracks = tracks => {
     this.setState({
-      tracks: tracks,
+      tracks,
       radio: "tracks"
     });
   };
 
-  selectPlaylist = playlist => {
+  selectPlaylist = selectedPlaylist => {
     this.setState({
-      selectedPlaylist: playlist,
+      selectedPlaylist,
       playlists: []
     });
   };
@@ -407,13 +383,7 @@ class App extends React.Component {
     );
   };
 
-  changeView = value => {
-    // console.log(value);
-
-    this.setState({
-      nav: value
-    });
-  };
+  changeView = nav => this.setState({ nav });
 
   render() {
     if (this.state.expires < new Date()) {
