@@ -137,12 +137,18 @@ th{
   overflow: auto;
 }
 
+button {
+  cursor: pointer;
+}
+
 .buttons{
+  cursor: pointer;
   display: flex;
   width: 35%;
 }
 
 .custom-button{
+  cursor: pointer;
   outline: none !important;
   border:1px solid $trackadderTheme1;
   background-color: transparent;
@@ -323,6 +329,7 @@ ul {
 }
 
 .logout{
+  cursor: pointer;
   margin: 5%;
   margin-top: 0%;
   margin-bottom: 0%;

@@ -12,6 +12,8 @@ import Login from "./components/login/login";
 import SpotifyWebApi from "../scripts/spotify-web-api";
 
 const spotifyApi = new SpotifyWebApi();
+const radioOptions = { TRACKS: "tracks", ALBUMS: "albums", ARTISTS: "artists" };
+const searchCountry = "ES";
 
 spotifyApi.searchTracks = debounce(spotifyApi.searchTracks, 500);
 spotifyApi.searchArtists = debounce(spotifyApi.searchArtists, 500);
@@ -53,43 +55,34 @@ class App extends React.Component {
   };
 
   handleRadioChange = e => {
-    this.setState(
-      {
-        radio: e.currentTarget.value
-      },
-      () => {
-        if (this.state.searchText) {
-          this.handleUserSearchInput(this.state.searchText);
-        }
+    this.setState({ radio: e.currentTarget.value }, () => {
+      // trigger search when radio changes
+      if (this.state.searchText) {
+        this.handleUserSearchInput(this.state.searchText);
       }
-    );
+    });
   };
 
   handleUserSearchChange = searchText => this.setState({ searchText });
 
   handleUserSearchInput = searchText => {
     if (searchText) {
-      if (this.state.radio === "tracks") {
+      if (this.state.radio === radioOptions.TRACKS) {
         spotifyApi.searchTracks(`track:${searchText}`).then(
           ({ tracks: { items: tracks } }) => {
-            // console.log(
-            //  'Search tracks by "' + searchText + '" in the track name',
-            //  data
-            // );
             this.setState({ tracks });
           },
           err => {
             console.error(err);
           }
         );
-      } else if (this.state.radio === "artists") {
+      } else if (this.state.radio === radioOptions.ARTISTS) {
         spotifyApi
           .searchArtists(`artist:${searchText}`, {
             Authorization: "Bearer " + "6e3b7695b6a54ff6ac27fdcc35afd87d"
           })
           .then(
             data => {
-              // console.log("Search artists data received : " + data);
               this.setState({ artists: data.artists.items });
             },
             err => {
@@ -99,13 +92,11 @@ class App extends React.Component {
       } else {
         spotifyApi.searchAlbums("album:" + searchText).then(
           ({ albums }) => {
-            // console.log("search album data received : " + data);
             this.setState({ albums: albums.items }, () => {
               const albumIds = this.state.albums.map(({ id }) => id);
               if (albumIds.length) {
                 spotifyApi.getAlbums(albumIds).then(
                   ({ albums: fullAlbums }) => {
-                    // console.log("Albums received: " + data.albums);
                     this.setState({ fullAlbums });
                   },
                   err => {
@@ -125,15 +116,13 @@ class App extends React.Component {
     }
   };
 
-  getArtistsAlbums = artist => {
-    spotifyApi.getArtistAlbums(artist.id).then(
-      ({ items }) => {
-        // console.log("search album data received : " + data);
-        this.setState({ albums: items, radio: "albums" }, () => {
+  getArtistsAlbums = ({ id: artistId }) => {
+    spotifyApi.getArtistAlbums(artistId).then(
+      ({ items: albums }) => {
+        this.setState({ albums, radio: radioOptions.ALBUMS }, () => {
           const albumIds = this.state.albums.map(({ id }) => id);
           spotifyApi.getAlbums(albumIds).then(
             ({ albums: fullAlbums }) => {
-              // console.log("Albums received: " + data.albums);
               this.setState({ fullAlbums });
             },
             err => {
@@ -148,13 +137,12 @@ class App extends React.Component {
     );
   };
 
-  getTopTracks = artist => {
-    spotifyApi.getArtistTopTracks(artist.id, "ES").then(
+  getTopTracks = ({ id }) => {
+    spotifyApi.getArtistTopTracks(id, searchCountry).then(
       ({ tracks }) => {
-        // console.log("top tracks received");
         this.setState({
           tracks,
-          radio: "tracks"
+          radio: radioOptions.TRACKS
         });
       },
       err => {
@@ -177,49 +165,34 @@ class App extends React.Component {
   authenticate = () => {
     const generateRandomString = N =>
       (Math.random().toString(36) + Array(N).join("0")).slice(2, N + 2);
-    const state = generateRandomString(16);
+    const stateKey = generateRandomString(16);
     const scopes =
       "user-read-private playlist-modify-private playlist-modify-public";
     const client_id = "6e3b7695b6a54ff6ac27fdcc35afd87d";
     const redirect_uri = "http://mangakid.co.uk/callback.html";
 
-    this.setState({ stateKey: state });
+    this.setState({ stateKey });
     var url = "https://accounts.spotify.com/authorize";
     url += "?response_type=token";
     url += "&show_dialog=true";
-    url += "&client_id=" + encodeURIComponent(client_id);
-    url += "&scope=" + encodeURIComponent(scopes);
-    url += "&redirect_uri=" + encodeURIComponent(redirect_uri);
-    url += "&state=" + encodeURIComponent(state);
+    url += `&client_id=${encodeURIComponent(client_id)}`;
+    url += `&scope=${encodeURIComponent(scopes)}`;
+    url += `&redirect_uri=${encodeURIComponent(redirect_uri)}`;
+    url += `&state=${encodeURIComponent(stateKey)}`;
 
     window.addEventListener(
       "message",
-      event => {
-        if (typeof event.data !== "object") {
-          var hash = JSON.parse(event.data);
-        } else {
-          var hash = event.data;
-        }
-        if (
-          hash.state === this.state.stateKey &&
-          hash.type === "access_token"
-        ) {
-          // console.log("states match, token received");
-          spotifyApi.setAccessToken(hash.access_token);
-          let expirationTime = new Date();
-          expirationTime = expirationTime.setSeconds(
-            expirationTime.getSeconds() + hash.expires_in
-          );
-          // console.log("will expire on :" + expirationTime);
-          // setToken & setExpires
-          this.setState({
-            token: hash.access_token,
-            expires: expirationTime
-          });
+      ({ data }) => {
+        const { access_token: token, expires_in, state, type } =
+          (typeof data !== "object" && JSON.parse(data)) || data;
+        if (state === this.state.stateKey && type === "access_token") {
+          spotifyApi.setAccessToken(token);
+          let expires = new Date();
+          expires = expires.setSeconds(expires.getSeconds() + expires_in);
+          this.setState({ token, expires });
           spotifyApi.getMe().then(
-            data => {
-              // console.log("User data received");
-              this.state.userId = data.id;
+            ({ id: userId }) => {
+              this.setState(() => ({ userId }));
               if (this.state.action) {
                 this.createUpdateOrReceivePlaylists();
               }
@@ -239,20 +212,13 @@ class App extends React.Component {
   createUpdateOrReceivePlaylists = () => {
     const uris = this.state.playlistTracks.map(({ uri }) => uri);
 
-    if (this.state.action == "MAKE_PLAYLIST") {
+    if (this.state.action === "MAKE_PLAYLIST") {
       const name = this.state.playlistName || "A rad playlist";
       const playlistOptions = { name };
       spotifyApi.createPlaylist(this.state.userId, playlistOptions).then(
-        data => {
-          /*  console.log(
-            "Playlist created: " +
-              JSON.stringify(data) +
-              "uri at index 0 is : " +
-              uris[0]
-          ); */
-          spotifyApi.addTracksToPlaylist(this.state.userId, data.id, uris).then(
+        ({ id }) => {
+          spotifyApi.addTracksToPlaylist(this.state.userId, id, uris).then(
             () => {
-              // console.log("Tracks added " + JSON.stringify(data));
               this.setState({
                 action: ""
               });
@@ -281,7 +247,6 @@ class App extends React.Component {
         )
         .then(
           () => {
-            // console.log("Tracks added " + JSON.stringify(data));
             this.setState({
               action: ""
             });
@@ -295,10 +260,9 @@ class App extends React.Component {
         );
     } else if (this.state.action == "GET_PLAYLISTS") {
       spotifyApi.getUserPlaylists(this.state.userId).then(
-        ({ items }) => {
-          //console.log('Playlists found: ' + JSON.stringify(data.items));
+        ({ items: playlists }) => {
           this.setState({
-            playlists: items,
+            playlists,
             showPlaylists: true,
             action: ""
           });
@@ -335,25 +299,21 @@ class App extends React.Component {
         playlistTracks: [...playlistTracks, track],
         searchText: ""
       }));
-
-      // console.log(track.name + " was added to playlist");
     }
   };
 
-  subtractTrack = track => {
+  subtractTrack = trackToSubtract => {
     this.setState(({ playlistTracks }) => ({
       playlistTracks: playlistTracks.filter(
-        currentTrack => currentTrack !== track
+        playlistTrack => playlistTrack !== trackToSubtract
       )
     }));
-
-    // console.log(track.name + " was subtracted from playlist");
   };
 
   loadAlbumTracks = tracks => {
     this.setState({
       tracks,
-      radio: "tracks"
+      radio: radioOptions.TRACKS
     });
   };
 
@@ -423,7 +383,7 @@ class App extends React.Component {
         />
         <PlaylistName
           show={
-            this.state.playlistTracks.length > 0 && this.state.nav == "playlist"
+            !!this.state.playlistTracks.length && this.state.nav === "playlist"
           }
           playlistName={this.state.playlistName}
           handleClick={this.getExistingPlaylists}
@@ -431,7 +391,7 @@ class App extends React.Component {
         />
         <MakePlaylistButton
           show={
-            this.state.playlistTracks.length > 0 && this.state.nav == "playlist"
+            !!this.state.playlistTracks.length && this.state.nav === "playlist"
           }
           handleClick={this.handleMakePlaylist}
           selectedPlaylist={this.state.selectedPlaylist}
