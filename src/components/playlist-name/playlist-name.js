@@ -1,29 +1,30 @@
-import React from 'react';
+import React, { useRef } from "react";
 
-class PlaylistName extends React.Component{
+const PlaylistName = ({ handleClick, onUserInput, playlistName, show }) => {
+  const inputEl = useRef(null);
 
-  handleChange = () => {
-    this.props.onUserInput(this.refs.playlistTextInput.value);
-  }
+  const handleChange = () => {
+    onUserInput(inputEl.current.value);
+  };
 
-  render() {
-    if(this.props.show != false){
-      return(
-        <form className='playlistName'>
-          <input
-             type="text"
-             className='inputBar'
-             placeholder="Playlist Name..."
-             value={this.props.playlistName}
-             ref="playlistTextInput"
-             onChange={this.handleChange} />
-             <button className='addDelete' type='button' onClick={this.props.handleClick}>Add to existing?</button>
-        </form>
-      );
-    }
-
-    return null;
-  }
+  return (
+    (show && (
+      <form className="playlistName">
+        <input
+          type="text"
+          className="inputBar"
+          placeholder="Playlist Name..."
+          value={playlistName}
+          ref={inputEl}
+          onChange={handleChange}
+        />
+        <button className="addDelete" type="button" onClick={handleClick}>
+          Add to existing?
+        </button>
+      </form>
+    )) ||
+    null
+  );
 };
 
 export default PlaylistName;

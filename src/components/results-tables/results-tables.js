@@ -1,25 +1,76 @@
-import React from 'react';
+import React from "react";
 
-import NavBar from '../nav-bar/nav-bar';
-import TracksTable from '../tracks-table/tracks-table';
-import ArtistsTable from '../artists-table/artists-table';
-import AlbumTable from '../album-table/album-table';
-import PlaylistTable from '../playlist-table/playlist-table';
-import PlaylistsTable from '../playlists-table/playlists-table';
+import NavBar from "../nav-bar/nav-bar";
+import TracksTable from "../tracks-table/tracks-table";
+import ArtistsTable from "../artists-table/artists-table";
+import AlbumTable from "../album-table/album-table";
+import PlaylistTable from "../playlist-table/playlist-table";
+import PlaylistsTable from "../playlists-table/playlists-table";
 
-const ResultsTables = (props) => {
+const ResultsTables = ({
+  addTrack,
+  albums,
+  artists,
+  changeView,
+  fullAlbums,
+  getArtistsAlbums,
+  getTop,
+  nav,
+  playlists,
+  playlistName,
+  playlistTracks,
+  radio,
+  selectedPlaylist,
+  selectPlaylist,
+  selectTracks,
+  subtractTrack,
+  tracks
+}) => {
+  return (
+    <div className="resultsTables">
+      <NavBar
+        show={tracks.length || albums.length || artists.length}
+        active={nav}
+        handleClick={changeView}
+        playlistTracks={playlistTracks}
+      />
+      <TracksTable
+        active={nav}
+        tracks={tracks}
+        handleClick={addTrack}
+        option={radio}
+      />
+      <ArtistsTable
+        active={nav}
+        artists={artists}
+        option={radio}
+        getArtistsAlbums={getArtistsAlbums}
+        getTop={getTop}
+      />
 
-  return(
-    <div className='resultsTables'>
-      <NavBar show={props.tracks.length > 0 || props.albums.length > 0 || props.artists.length > 0} active={props.nav} handleClick={props.changeView} playlistTracks={props.playlistTracks}/>
-      <TracksTable active={props.nav} tracks={props.tracks} handleClick={props.addTrack} option={props.radio}/>
-      <ArtistsTable active={props.nav} artists={props.artists} option={props.radio} getArtistsAlbums={props.getArtistsAlbums} getTop={props.getTop}/>
-
-      <AlbumTable active={props.nav} fullAlbums={props.fullAlbums} option={props.radio} handleAddTrack={props.addTrack} selectTracks={props.selectTracks}/>
-      <PlaylistTable active={props.nav} playlists={props.playlists} tracks={props.playlistTracks} handleClick={props.subtractTrack}/>
-      <PlaylistsTable active={props.nav} playlists={props.playlists} playlistTracks={props.playlistTracks} playlistName={props.playlistName} handleClick={props.selectPlaylist} selectedPlaylist={props.selectedPlaylist}/>
+      <AlbumTable
+        active={nav}
+        fullAlbums={fullAlbums}
+        option={radio}
+        handleAddTrack={addTrack}
+        selectTracks={selectTracks}
+      />
+      <PlaylistTable
+        active={nav}
+        playlists={playlists}
+        tracks={playlistTracks}
+        handleClick={subtractTrack}
+      />
+      <PlaylistsTable
+        active={nav}
+        playlists={playlists}
+        playlistTracks={playlistTracks}
+        playlistName={playlistName}
+        handleClick={selectPlaylist}
+        selectedPlaylist={selectedPlaylist}
+      />
     </div>
   );
-}
+};
 
 export default ResultsTables;

@@ -1,37 +1,39 @@
-import React from 'react';
+import React, { useRef } from "react";
 
-class SearchBar extends React.Component{
+const SearchBar = props => {
+  const inputEl = useRef(null);
 
-  handleChange = () => {
-    this.props.onUserInput(this.refs.searchTextInput.value);
-  }
+  const handleChange = () => {
+    props.onUserInput(inputEl.current.value);
+  };
 
-  handleKeyUp = () => {
-    this.props.onKeyUp(this.refs.searchTextInput.value);
-  }
+  const handleKeyUp = () => {
+    props.onKeyUp(inputEl.current.value);
+  };
 
-  clearText = (e) => {
+  const clearText = e => {
     e.preventDefault();
-    if(this.refs.searchTextInput.value != ''){
-      this.refs.searchTextInput.value = '';
+    if (inputEl.current.value) {
+      inputEl.current.value = "";
     }
-  }
+  };
 
-  render() {
-    return (
-      <div className='searchForm'>
-        <input
-           type="text"
-           className='inputBar'
-           placeholder="Search for..."
-           value={this.props.searchText}
-           ref="searchTextInput"
-           onKeyUp={this.handleKeyUp}
-           onChange={this.handleChange} />
-        <button type='button' className='addDelete' onClick={this.clearText}>Clear</button>
-      </div>
-    );
-  }
+  return (
+    <div className="searchForm">
+      <input
+        type="text"
+        className="inputBar"
+        placeholder="Search for..."
+        value={props.searchText}
+        ref={inputEl}
+        onKeyUp={handleKeyUp}
+        onChange={handleChange}
+      />
+      <button type="button" className="addDelete" onClick={clearText}>
+        Clear
+      </button>
+    </div>
+  );
 };
 
 export default SearchBar;
