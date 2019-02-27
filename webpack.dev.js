@@ -1,28 +1,29 @@
-const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const webpack = require("webpack");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
   entry: {
-    'app' : [
-      'react-hot-loader/patch',
-      './src/app.js'
-    ]
+    app: ["react-hot-loader/patch", "./src/app.js"]
   },
   output: {
     path: __dirname,
-    filename: 'bundle.js'
+    filename: "bundle.js"
   },
   module: {
     rules: [
       {
         test: /.js?$/,
         use: [
-          { loader: 'react-hot-loader/webpack' },
+          { loader: "react-hot-loader/webpack" },
           {
-            loader: 'babel-loader',
+            loader: "babel-loader",
             options: {
-              presets: ['env','react', 'es2015', 'react-hmre'],
-              plugins: ['transform-class-properties']
+              presets: ["env", "react", "es2015", "react-hmre"],
+              plugins: [
+                "transform-class-properties",
+                "transform-es2015-destructuring",
+                "transform-object-rest-spread"
+              ]
             }
           }
         ],
@@ -32,7 +33,7 @@ module.exports = {
         test: /\.scss$/,
         use: ExtractTextPlugin.extract({
           fallback: "style-loader",
-          use: ["css-loader","sass-loader"]
+          use: ["css-loader", "sass-loader"]
         })
       }
     ]
@@ -42,12 +43,12 @@ module.exports = {
     historyApiFallback: true,
     hot: true,
     inline: true,
-    stats: 'errors-only',
+    stats: "errors-only",
     host: process.env.HOST,
     port: process.env.PORT
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new ExtractTextPlugin('./css/base.css')
+    new ExtractTextPlugin("./css/base.css")
   ]
 };

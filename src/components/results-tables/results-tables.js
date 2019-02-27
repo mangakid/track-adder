@@ -10,7 +10,9 @@ import PlaylistsTable from "../playlists-table/playlists-table";
 const ResultsTables = ({
   addTrack,
   albums,
+  albumsLoading,
   artists,
+  artistsLoading,
   changeView,
   fullAlbums,
   getArtistsAlbums,
@@ -24,7 +26,8 @@ const ResultsTables = ({
   selectPlaylist,
   selectTracks,
   subtractTrack,
-  tracks
+  tracks,
+  tracksLoading
 }) => {
   return (
     <div className="resultsTables">
@@ -39,6 +42,7 @@ const ResultsTables = ({
         tracks={tracks}
         handleClick={addTrack}
         option={radio}
+        tracksLoading={tracksLoading}
       />
       <ArtistsTable
         active={nav}
@@ -46,6 +50,7 @@ const ResultsTables = ({
         option={radio}
         getArtistsAlbums={getArtistsAlbums}
         getTop={getTop}
+        artistsLoading={artistsLoading}
       />
 
       <AlbumTable
@@ -54,6 +59,7 @@ const ResultsTables = ({
         option={radio}
         handleAddTrack={addTrack}
         selectTracks={selectTracks}
+        albumsLoading={albumsLoading}
       />
       <PlaylistTable
         active={nav}
