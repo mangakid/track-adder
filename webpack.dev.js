@@ -12,17 +12,17 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /.js?$/,
+        test: /\.(js|jsx)$/,
         use: [
           { loader: "react-hot-loader/webpack" },
           {
             loader: "babel-loader",
             options: {
-              presets: ["env", "react", "es2015", "react-hmre"],
+              presets: ["@babel/react"],
               plugins: [
-                "transform-class-properties",
-                "transform-es2015-destructuring",
-                "transform-object-rest-spread"
+                "@babel/plugin-proposal-class-properties",
+                "@babel/plugin-transform-destructuring",
+                "@babel/plugin-proposal-object-rest-spread"
               ]
             }
           }

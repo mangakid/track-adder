@@ -1,15 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import Album from "../album/album";
 
-const AlbumTable = props => {
-  const {
-    active,
-    fullAlbums,
-    handleAddTrack,
-    option,
-    selectTracks,
-    albumsLoading
-  } = props;
+import { AppContext } from "../../app.js";
+
+const AlbumTable = ({ addTrack: handleAddTrack, selectTracks }) => {
+  const { nav: active, fullAlbums, radio: option, albumsLoading } = useContext(
+    AppContext
+  );
   const renderRows = () =>
     fullAlbums.map(album => {
       const style = fullAlbums.indexOf(album) % 2 ? "even" : "odd";

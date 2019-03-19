@@ -1,13 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import TrackRow from "../track-row/track-row";
 
-const TracksTable = ({
-  active,
-  handleClick,
-  option,
-  tracks,
-  tracksLoading
-}) => {
+import { AppContext } from "../../app.js";
+
+const TracksTable = ({ addTrack: handleClick }) => {
+  const { nav: active, tracks, radio: option, tracksLoading } = useContext(
+    AppContext
+  );
   const renderRows = () =>
     tracks.map((track, index) => (
       <TrackRow

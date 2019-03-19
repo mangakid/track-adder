@@ -9,72 +9,21 @@ import PlaylistsTable from "../playlists-table/playlists-table";
 
 const ResultsTables = ({
   addTrack,
-  albums,
-  albumsLoading,
-  artists,
-  artistsLoading,
   changeView,
-  fullAlbums,
   getArtistsAlbums,
   getTop,
-  nav,
-  playlists,
-  playlistName,
-  playlistTracks,
-  radio,
-  selectedPlaylist,
-  selectPlaylist,
   selectTracks,
-  subtractTrack,
-  tracks,
-  tracksLoading
+  selectPlaylist,
+  subtractTrack
 }) => {
   return (
     <div className="resultsTables">
-      <NavBar
-        show={tracks.length || albums.length || artists.length}
-        active={nav}
-        handleClick={changeView}
-        playlistTracks={playlistTracks}
-      />
-      <TracksTable
-        active={nav}
-        tracks={tracks}
-        handleClick={addTrack}
-        option={radio}
-        tracksLoading={tracksLoading}
-      />
-      <ArtistsTable
-        active={nav}
-        artists={artists}
-        option={radio}
-        getArtistsAlbums={getArtistsAlbums}
-        getTop={getTop}
-        artistsLoading={artistsLoading}
-      />
-
-      <AlbumTable
-        active={nav}
-        fullAlbums={fullAlbums}
-        option={radio}
-        handleAddTrack={addTrack}
-        selectTracks={selectTracks}
-        albumsLoading={albumsLoading}
-      />
-      <PlaylistTable
-        active={nav}
-        playlists={playlists}
-        tracks={playlistTracks}
-        handleClick={subtractTrack}
-      />
-      <PlaylistsTable
-        active={nav}
-        playlists={playlists}
-        playlistTracks={playlistTracks}
-        playlistName={playlistName}
-        handleClick={selectPlaylist}
-        selectedPlaylist={selectedPlaylist}
-      />
+      <NavBar handleClick={changeView} />
+      <TracksTable addTrack={addTrack} />
+      <ArtistsTable getArtistsAlbums={getArtistsAlbums} getTop={getTop} />
+      <AlbumTable addTrack={addTrack} selectTracks={selectTracks} />
+      <PlaylistTable handleClick={subtractTrack} />
+      <PlaylistsTable selectPlaylist={selectPlaylist} />
     </div>
   );
 };

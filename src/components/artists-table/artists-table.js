@@ -1,14 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import Artist from "../artist/artist";
 
-const ArtistsTable = ({
-  active,
-  artists,
-  artistsLoading,
-  getArtistsAlbums,
-  getTop,
-  option
-}) => {
+import { AppContext } from "../../app.js";
+
+const ArtistsTable = ({ getArtistsAlbums, getTop }) => {
+  const { nav: active, artists, radio: option, artistsLoading } = useContext(
+    AppContext
+  );
   const renderRows = () =>
     artists.map((artist, index) => (
       <Artist

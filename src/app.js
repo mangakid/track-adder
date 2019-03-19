@@ -15,6 +15,7 @@ import { reducer } from "./reducer";
 
 const spotifyApi = new SpotifyWebApi();
 const searchCountry = "ES";
+export const AppContext = React.createContext();
 
 spotifyApi.searchTracks = debounce(spotifyApi.searchTracks, 500);
 spotifyApi.searchArtists = debounce(spotifyApi.searchArtists, 500);
@@ -340,50 +341,41 @@ const App = () => {
   const changeView = nav => dispatch({ type: "set_view", payload: nav });
 
   return state.expires < new Date() ? (
-    <Login login={authenticate} />
+    <AppContext.Provider value={state}>
+      <Login login={authenticate} />
+    </AppContext.Provider>
   ) : (
-    <div className="mainDiv">
-      <Logout userId={state.userId} handleClick={logOut} />
-      <RadioOptions option={state.radio} handleChange={handleRadioChange} />
-      <SearchBar
-        searchText={state.searchText}
-        onUserInput={handleUserSearchChange}
-        onKeyUp={handleUserSearchInput}
-      />
-      <ResultsTables
-        artistsLoading={state.artistsLoading}
-        tracks={state.tracks}
-        albums={state.albums}
-        albumsLoading={state.albumsLoading}
-        fullAlbums={state.fullAlbums}
-        artists={state.artists}
-        nav={state.nav}
-        radio={state.radio}
-        playlists={state.playlists}
-        playlistTracks={state.playlistTracks}
-        playlistName={state.playlistName}
-        selectedPlaylist={state.selectedPlaylist}
-        changeView={changeView}
-        getArtistsAlbums={getArtistsAlbums}
-        getTop={getTopTracks}
-        addTrack={addTrack}
-        selectTracks={loadAlbumTracks}
-        subtractTrack={subtractTrack}
-        selectPlaylist={selectPlaylist}
-        tracksLoading={state.tracksLoading}
-      />
-      <PlaylistName
-        show={!!state.playlistTracks.length && state.nav === "playlist"}
-        playlistName={state.playlistName}
-        handleClick={getExistingPlaylists}
-        onUserInput={handleUserPlaylistInput}
-      />
-      <MakePlaylistButton
-        show={!!state.playlistTracks.length && state.nav === "playlist"}
-        handleClick={handleMakePlaylist}
-        selectedPlaylist={state.selectedPlaylist}
-      />
-    </div>
+    <AppContext.Provider value={state}>
+      <div className="mainDiv">
+        <Logout userId={state.userId} handleClick={logOut} />
+        <RadioOptions option={state.radio} handleChange={handleRadioChange} />
+        <SearchBar
+          searchText={state.searchText}
+          onUserInput={handleUserSearchChange}
+          onKeyUp={handleUserSearchInput}
+        />
+        <ResultsTables
+          changeView={changeView}
+          getArtistsAlbums={getArtistsAlbums}
+          getTop={getTopTracks}
+          addTrack={addTrack}
+          selectTracks={loadAlbumTracks}
+          subtractTrack={subtractTrack}
+          selectPlaylist={selectPlaylist}
+        />
+        <PlaylistName
+          show={!!state.playlistTracks.length && state.nav === "playlist"}
+          playlistName={state.playlistName}
+          handleClick={getExistingPlaylists}
+          onUserInput={handleUserPlaylistInput}
+        />
+        <MakePlaylistButton
+          show={!!state.playlistTracks.length && state.nav === "playlist"}
+          handleClick={handleMakePlaylist}
+          selectedPlaylist={state.selectedPlaylist}
+        />
+      </div>
+    </AppContext.Provider>
   );
 };
 
